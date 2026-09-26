@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IRONSHIFT — Transformation Lab</title>
+    <meta name="description" content="Configure a vehicle, name your unit, and watch it transform into a combat mech." />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="stage"></div>
+
+    <div class="hud" id="hud">
+      <header class="brand">
+        <svg class="brand-mark" viewBox="-0.6 -0.6 1.2 1.2" aria-hidden="true"><path id="brandPath" /></svg>
+        <div>
+          <div class="brand-word">IRONSHIFT</div>
+          <div class="brand-sub">Transformation Lab</div>
+        </div>
+      </header>
+
+      <div class="top-actions">
+        <button class="icon-btn" id="btnSound" aria-label="Toggle sound" title="Sound (M)">
+          <svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z" /><path class="wave" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" /></svg>
+        </button>
+        <button class="icon-btn" id="btnCapture" aria-label="Capture image" title="Capture (C)">
+          <svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z" /><circle cx="12" cy="13" r="3.5" /></svg>
+        </button>
+        <button class="icon-btn" id="btnShare" aria-label="Copy share link" title="Copy link">
+          <svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1" /><path d="M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1" /></svg>
+        </button>
+        <button class="icon-btn" id="btnHide" aria-label="Hide interface" title="Hide UI (H)">
+          <svg viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z" /><circle cx="12" cy="12" r="3" /></svg>
+        </button>
+        <button class="icon-btn panel-toggle" id="btnPanel" aria-label="Open configuration">
+          <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+        </button>
+      </div>
+
+      <aside class="panel" id="panel">
+        <div class="panel-head">
+          <span class="label">Configuration</span>
+          <span class="mono dim" id="serialTop">—</span>
+        </div>
+        <div class="panel-scroll">
+          <section class="sec">
+            <div class="sec-title"><span class="num">01</span>Chassis</div>
+            <div class="chassis-grid" id="chassis"></div>
+          </section>
+          <section class="sec">
+            <div class="sec-title"><span class="num">02</span>Designation</div>
+            <div class="name-row">
+              <input id="nameInput" class="name-input" maxlength="14" spellcheck="false" autocomplete="off" aria-label="Unit name" />
+              <button class="icon-btn small" id="btnDice" aria-label="Random name" title="Random name">
+                <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3" /><circle cx="9" cy="9" r="1.2" /><circle cx="15" cy="15" r="1.2" /><circle cx="15" cy="9" r="1.2" /><circle cx="9" cy="15" r="1.2" /></svg>
+              </button>
+            </div>
+          </section>
+          <section class="sec">
+            <div class="sec-title"><span class="num">03</span>Finish <span class="sec-value" id="paintName"></span></div>
+            <div class="swatches" id="paints"></div>
+            <div class="seg" id="finishes"></div>
+          </section>
+          <section class="sec">
+            <div class="sec-title"><span class="num">04</span>Energy Signature <span class="sec-value" id="energyName"></span></div>
+            <div class="swatches energy" id="energies"></div>
+          </section>
+          <section class="sec">
+            <div class="sec-title"><span class="num">05</span>Loadout</div>
+            <div class="seg tall" id="loadouts"></div>
+          </section>
+          <section class="sec">
+            <div class="sec-title"><span class="num">06</span>Insignia</div>
+            <div class="seg tall" id="insignias"></div>
+          </section>
+          <section class="sec">
+            <div class="sec-title"><span class="num">07</span>Sequence Speed</div>
+            <div class="seg" id="speeds"></div>
+          </section>
+        </div>
+      </aside>
+
+      <section class="dossier" id="dossier">
+        <div class="label">Unit Dossier</div>
+        <div class="d-name" id="dName">VANTAGE</div>
+        <div class="d-class" id="dClass">Striker-class</div>
+        <div class="d-meta mono" id="dMeta"></div>
+        <div class="stats" id="dStats"></div>
+        <p class="bio" id="dBio"></p>
+      </section>
+
+      <section class="control">
+        <div class="mode mono"><span class="dot" id="modeDot"></span><span id="modeText">Vehicle mode</span><span class="dim" id="modePct"></span></div>
+        <div class="scrub">
+          <input type="range" id="scrub" min="0" max="1000" value="0" aria-label="Transformation timeline" />
+          <div class="scrub-ticks mono"><span>Unlock</span><span>Rise</span><span>Deploy</span><span>Arm</span><span>Ignite</span></div>
+        </div>
+        <button class="primary" id="btnTransform">
+          <span class="primary-label" id="transformLabel">Transform</span>
+          <kbd>Space</kbd>
+        </button>
+      </section>
+
+      <div class="toast mono" id="toast"></div>
+    </div>
+
+    <div class="intro" id="intro">
+      <div class="intro-inner">
+        <svg class="intro-mark" viewBox="-0.6 -0.6 1.2 1.2" aria-hidden="true"><path id="introPath" /></svg>
+        <div class="intro-word">IRONSHIFT</div>
+        <div class="intro-tag">Vehicle-to-combat transformation lab</div>
+        <div class="intro-bar"><div id="introProgress"></div></div>
+        <button class="primary intro-btn" id="btnEnter" disabled>
+          <span class="primary-label">Initializing</span>
+        </button>
+        <div class="intro-hint mono">Best with sound on</div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
